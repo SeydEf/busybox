@@ -1,0 +1,10 @@
+{
+  "name": "vercel-busy-box",
+  "version": "1.1.0",
+  "description": "Busy Box a management app for tasks",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "vercel": "^52.2.1"
+  }
+}
