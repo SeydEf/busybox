@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Todo Manager</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        max-width: 500px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+        background: #f9fafb;
+      }
+      .container {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        margin-top: 0;
+      }
+      .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 1rem;
+      }
+      input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+      button {
+        padding: 8px 16px;
+        background: #0070f3;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      button:hover {
+        background: #0051b3;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      li {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px;
+        background: #f3f4f6;
+        margin-bottom: 8px;
+        border-radius: 4px;
+      }
+      .delete-btn {
+        background: #ef4444;
+        padding: 4px 8px;
+        font-size: 14px;
+      }
+      .delete-btn:hover {
+        background: #b91c1c;
+      }
+      .completed {
+        text-decoration: line-through;
+        color: #6b7280;
+      }
+      .todo-text {
+        cursor: pointer;
+        flex: 1;
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Todos</h1>
+      <div class="input-group">
+        <input
+          type="text"
+          id="todoInput"
+          placeholder="What needs to be done?"
+          onkeypress="if (event.key === 'Enter') addTodo();"
+        />
+        <button onclick="addTodo()">Add</button>
+      </div>
+      <ul id="todoList"></ul>
+    </div>
+
+    <script>
+      let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+      function renderTodos() {
+        const list = document.getElementById("todoList");
+        list.innerHTML = "";
+        todos.forEach((todo, index) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+                    <span class="todo-text ${todo.completed ? "completed" : ""}" onclick="toggleTodo(${index})">
+                        ${todo.text}
+                    </span>
+                    <button class="delete-btn" onclick="deleteTodo(${index})">Delete</button>
+                `;
+          list.appendChild(li);
+        });
+        localStorage.setItem("todos", JSON.stringify(todos));
+      }
+
+      function addTodo() {
+        const input = document.getElementById("todoInput");
+        const text = input.value.trim();
+        if (text) {
+          todos.push({ text, completed: false });
+          input.value = "";
+          renderTodos();
+        }
+      }
+
+      function toggleTodo(index) {
+        todos[index].completed = !todos[index].completed;
+        renderTodos();
+      }
+
+      function deleteTodo(index) {
+        todos.splice(index, 1);
+        renderTodos();
+      }
+
+      // Initial render
+      renderTodos();
+    </script>
+  </body>
+</html>
